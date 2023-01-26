@@ -5,6 +5,7 @@ class Application
   def self.run
     menu = Menu.new
     begin
+      puts
       puts " Simple Address Book Application ".center(50, "#")
       puts "1. Add Contact"
       puts "2. Edit Contact"
@@ -15,10 +16,10 @@ class Application
       user_choice = gets.chomp
 
       case user_choice
-      when '1' then menu.add
-      when '2' then menu.edit
-      when '3' then menu.show_all
-      when '4' then menu.delete
+      when '1' then menu.add_contact
+      when '2' then menu.edit_contact
+      when '3' then menu.view_all_contact
+      when '4' then menu.delete_contact
       end  
 
     end while user_choice != '00'
@@ -26,10 +27,11 @@ class Application
 
   class Menu
     def initialize
-      @manager = Manager.new
+      @manager = Manager.new\
+
     end
 
-    def add
+    def add_contact
       puts
       print "First Name: "
       first_name = gets.chomp
@@ -41,13 +43,14 @@ class Application
       user_details = "#{first_name} #{last_name} : #{tel}"                 
       address = Address.new(first_name, last_name, tel)
       @manager.store(address)
+      puts "Contact Successfully Added".center(50, "*")
     end
 
-    def show_all
+    def view_all_contact
       @manager.show_all
     end
 
-    def edit
+    def edit_contact
       begin
         @manager.show_all
         entries = @manager.get_all
@@ -55,18 +58,22 @@ class Application
           print "Enter Index Number to Edit: "
           index = gets.chomp.to_i
           address = entries.fetch(index-1)
-          print "Address: "
-          text = gets.chomp
-          address.set_text(text)
+          print "First name: "
+          first_name = gets.chomp
+          print "Last name: "
+          last_name = gets.chomp
+          print "Tel: "
+          tel = gets.chomp
+          address.set_text(first_name, last_name, tel)
           @manager.store(address)
-          puts "Entry Updated".center(50, "*")
+          puts "Contact Updated".center(50, "*")
         end
       rescue Exception => e 
         puts "invalid input".center(50, "-")
       end
     end
 
-    def delete
+    def delete_contact
       begin
         @manager.show_all
         entries = @manager.get_all
@@ -75,7 +82,7 @@ class Application
           index = gets.chomp.to_i
           address = entries.fetch(index-1)
           @manager.delete(address)
-          puts "Entry Deleted".center(50, "*")
+          puts "Contact Deleted".center(50, "*")
         end
       rescue Exception => e 
         puts "invalid input".center(50, "-")

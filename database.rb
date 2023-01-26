@@ -2,12 +2,12 @@ require 'pstore'
 
 class Database
   def initialize
-    @store = PStore.new("address.store")
+    @store = PStore.new("address.txt")
   end
 
   def store(address)
     @store.transaction do
-      @store[address.id.to_sym] = address
+      @store[address.id] = address
     end
   end
 
@@ -23,7 +23,7 @@ class Database
 
   def delete(address)
     @store.transaction do
-      @store.delete(address.id.to_sym)
+      @store.delete(address.id)
     end
   end
 
